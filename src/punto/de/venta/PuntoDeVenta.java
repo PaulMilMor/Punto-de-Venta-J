@@ -6,6 +6,7 @@
 
 package punto.de.venta;
 
+import java.util.List;
 import javax.swing.JFrame;
 
 /**
