@@ -63,18 +63,25 @@ public class Ventas extends javax.swing.JFrame {
     });
 
     private void buscarProductos() {
+
         if (inputtext.getText().indexOf('*') != -1) {
+
             String[] temparray = inputtext.getText().split(Pattern.quote("*"));
+
             for (int i = 0; i < productos.size(); i++) {
+
                 try {
+
                     if (Integer.parseInt(temparray[1]) == productos.get(i).getCodigo()) {
+
                         if (Integer.parseInt(temparray[0]) > productos.get(i).getInventario()) {
-                            JOptionPane.showMessageDialog(null, "Solamente hay " + productos.get(i).getInventario() + " en existencia.","No hay existencias",  JOptionPane.WARNING_MESSAGE);
+
+                            JOptionPane.showMessageDialog(null, "Solamente hay " + productos.get(i).getInventario() + " en existencia.", "No hay existencias", JOptionPane.WARNING_MESSAGE);
 
                         } else {
+
                             Producto p = productos.get(i);
                             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
                             model.addRow(new Object[]{
                                 p.getNombre(), temparray[0], p.getPrecio(),
                                 (float) p.getPrecio() * (float) p.getDescuento() / (float) 100,
@@ -88,26 +95,38 @@ public class Ventas extends javax.swing.JFrame {
 
                     }
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null,  "Inserte una cantidad válida.", "Error",JOptionPane.WARNING_MESSAGE);
+
+                    JOptionPane.showMessageDialog(null, "Ingrese una cantidad válida.", "Error", JOptionPane.WARNING_MESSAGE);
                     inputtext.setText("");
+
                 }
 
             }
         } else {
+
             int code;
+
             try {
+
                 code = Integer.parseInt(inputtext.getText());
+
             } catch (NumberFormatException e) {
+
                 code = 0;
-                JOptionPane.showMessageDialog(null,  "Inserte un código válido.", "Error",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Inserte un código válido.", "Error", JOptionPane.WARNING_MESSAGE);
+                inputtext.setText("");
 
             }
             for (int i = 0; i < productos.size(); i++) {
+
                 if (code == productos.get(i).getCodigo()) {
+
                     if (productos.get(i).getInventario() == 0) {
+
                         JOptionPane.showMessageDialog(null, "No hay de ese producto en existencia.", "Error", JOptionPane.WARNING_MESSAGE);
 
                     } else {
+                        
                         Producto p = productos.get(i);
                         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                         model.addRow(new Object[]{
@@ -118,6 +137,7 @@ public class Ventas extends javax.swing.JFrame {
                         total();
                         c.Reduce(p.getCodigo(), p.getInventario() - 1);
                         vendidos.add(p);
+                        
                     }
 
                 }
@@ -128,14 +148,19 @@ public class Ventas extends javax.swing.JFrame {
     }
 
     private float total() {
+       
         float totalnum = 0.0f;
         for (int i = 0; i < jTable1.getRowCount(); i++) {
+            
             totalnum += Float.parseFloat(jTable1.getModel().getValueAt(i, 4).toString());
+        
         }
+        
         total.setText("Total =  " + totalnum);
         inputtext.setText("");
         inputtext.requestFocus();
         return totalnum;
+    
     }
 
     @SuppressWarnings("unchecked")
@@ -149,6 +174,7 @@ public class Ventas extends javax.swing.JFrame {
         inputtext = new javax.swing.JTextField();
         total = new javax.swing.JLabel();
         time1 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -199,6 +225,9 @@ public class Ventas extends javax.swing.JFrame {
         time1.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 14)); // NOI18N
         time1.setText("Caja #1");
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel1.setText("Presione \"h\" para abrir el menú de ayuda.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -220,6 +249,9 @@ public class Ventas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(total, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(46, 46, 46))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,7 +264,9 @@ public class Ventas extends javax.swing.JFrame {
                     .addComponent(time1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
-                .addGap(32, 32, 32)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputtext, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(total))
@@ -245,32 +279,72 @@ public class Ventas extends javax.swing.JFrame {
     private void inputtextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputtextKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            inputtext.setText("");
             productos = c.getProductos();
             buscarProductos();
+            
+            
+        }
+        if(evt.getKeyCode() == KeyEvent.VK_H){
+            
             inputtext.setText("");
+            Help h = new Help();
+            h.setVisible(true);
+            
+            
         }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            
             if (jTable1.getRowCount() >= 1) {
+                
                 Producto p = vendidos.get(vendidos.size() - 1);
                 c.Increment(p.getCodigo(), p.getInventario());
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 model.removeRow(model.getRowCount() - 1);
                 vendidos.remove(p);
                 total();
+                
             }
 
         }
         if (evt.getKeyCode() == KeyEvent.VK_P) {
             float subtotal = total() / (float) 1.16;
             float iva = total() - subtotal;
-            if(vendidos.size() >=1){
+            if (vendidos.size() >= 1) {
+               
+                int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to Save your Previous Note First?","Warning",JOptionPane.YES_NO_OPTION);
+                
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    
+                    Input in = new Input(subtotal, iva, total());
+                    in.setVisible(true);
+                    DefaultTableModel dm = (DefaultTableModel) jTable1.getModel();
+                    int rowCount = dm.getRowCount();
+//Remove rows one by one from the end of the table
+                    for (int i = rowCount - 1; i >= 0; i--) {
+                        
+                        dm.removeRow(i);
+                    
+                    }
+                    
+                    total.setText("Total = ");
+                
+                } else{
+                  
+                    inputtext.setText("");
+                    
+                }
+            } else{
+                
+                JOptionPane.showMessageDialog(null, "No puede pagar si no se ha vendido nada.", "Error", JOptionPane.WARNING_MESSAGE);
+
                 
             }
         }
         if (evt.getKeyCode() == KeyEvent.VK_S) {
-            if(jTable1.getRowCount() > 0){
-                JOptionPane.showMessageDialog(null, "Termine o cancele su venta antes de salir","Error",  JOptionPane.WARNING_MESSAGE);
-                 inputtext.setText("");
+            if (jTable1.getRowCount() > 0) {
+                JOptionPane.showMessageDialog(null, "Termine o cancele su venta antes de salir", "Error", JOptionPane.WARNING_MESSAGE);
+                inputtext.setText("");
             }
             int result = JOptionPane.showConfirmDialog(null, "¿Seguro que desea salir?", "Salir",
                     JOptionPane.YES_NO_OPTION,
@@ -321,6 +395,7 @@ public class Ventas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Title;
     private javax.swing.JTextField inputtext;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel time;
