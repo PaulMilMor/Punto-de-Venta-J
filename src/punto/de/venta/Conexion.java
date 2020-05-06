@@ -8,6 +8,8 @@ package punto.de.venta;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -32,7 +34,29 @@ public class Conexion {
             connection.close();
 
         } catch (SQLException e) {
-            throw new IllegalStateException("Cannot connect to database!", e);
+            //throw new IllegalStateException("Cannot connect to database! " + e.getErrorCode(), e);
+            switch (e.getErrorCode()) {
+                case 0:
+                    JOptionPane.showMessageDialog(null, "Can't connect to server. Working on local server", "Error", JOptionPane.WARNING_MESSAGE);
+
+                    try {
+                        url = "jdbc:mysql://localhost:3307/tiendaisi";
+                        user =  "usr217210185";
+                        password = "pw217210185";
+                        connection = DriverManager.getConnection(url, "usr217210185", "pw217210185");
+                        connection.close();
+                    } catch (SQLException ex) {
+                        System.out.println(ex.getMessage());
+                        
+                        switch (e.getErrorCode()) {
+                            case 0:
+                                JOptionPane.showMessageDialog(null, "Can't connect to local server either.", "Error", JOptionPane.WARNING_MESSAGE);
+                                break;
+                        }
+                    }
+                    break;
+            }
+
         }
     }
 
@@ -57,7 +81,7 @@ public class Conexion {
             connection.close();
             return productos;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null,  "" + e,"Error de conexión.", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "" + e, "Error de conexión.", JOptionPane.WARNING_MESSAGE);
             return productos;
         }
 
@@ -80,10 +104,10 @@ public class Conexion {
 
     public void Increment(int code, int invent) {
         String query = "UPDATE producto SET inventario = ? WHERE idproducto  = ?";
-         try {
+        try {
             connection = DriverManager.getConnection(url, user, password);
             PreparedStatement preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setInt(1,invent);
+            preparedStmt.setInt(1, invent);
             preparedStmt.setInt(2, code);
             preparedStmt.executeUpdate();
             connection.close();
@@ -94,5 +118,3 @@ public class Conexion {
     }
 
 }
-
-

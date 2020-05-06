@@ -108,7 +108,6 @@ public class Ventas extends javax.swing.JFrame {
 
             try {
                 code = Integer.parseInt(inputtext.getText());
-                
 
             } catch (NumberFormatException e) {
 
@@ -127,7 +126,7 @@ public class Ventas extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "No hay de ese producto en existencia.", "Error", JOptionPane.WARNING_MESSAGE);
 
                     } else {
-                        
+
                         Producto p = productos.get(i);
                         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                         model.addRow(new Object[]{
@@ -138,7 +137,7 @@ public class Ventas extends javax.swing.JFrame {
                         total();
                         c.Reduce(p.getCodigo(), p.getInventario() - 1);
                         vendidos.add(p);
-                        
+
                     }
 
                 }
@@ -149,19 +148,19 @@ public class Ventas extends javax.swing.JFrame {
     }
 
     private float total() {
-       
+
         float totalnum = 0.0f;
         for (int i = 0; i < jTable1.getRowCount(); i++) {
-            
+
             totalnum += Float.parseFloat(jTable1.getModel().getValueAt(i, 4).toString());
-        
+
         }
-        
+
         total.setText("Total =  " + totalnum);
         inputtext.setText("");
         inputtext.requestFocus();
         return totalnum;
-    
+
     }
 
     @SuppressWarnings("unchecked")
@@ -284,30 +283,28 @@ public class Ventas extends javax.swing.JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             productos = c.getProductos();
             buscarProductos();
-            
+
             inputtext.setText("");
-            
-            
+
         }
-        if(evt.getKeyCode() == KeyEvent.VK_H){
-            
+        if (evt.getKeyCode() == KeyEvent.VK_H) {
+
             Help h = new Help();
             h.setVisible(true);
             inputtext.setText("");
-            
-            
+
         }
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            
+
             if (jTable1.getRowCount() >= 1) {
-                
+
                 Producto p = vendidos.get(vendidos.size() - 1);
                 c.Increment(p.getCodigo(), p.getInventario());
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 model.removeRow(model.getRowCount() - 1);
                 vendidos.remove(p);
                 total();
-                
+
             }
 
         }
@@ -315,49 +312,52 @@ public class Ventas extends javax.swing.JFrame {
             float subtotal = total() / (float) 1.16;
             float iva = total() - subtotal;
             if (vendidos.size() >= 1) {
-               
-                int dialogResult = JOptionPane.showConfirmDialog (null, "¿Listo para pagar?","Pagar",JOptionPane.YES_NO_OPTION);
-                
-                if(dialogResult == JOptionPane.YES_OPTION){
-                    
+
+                int dialogResult = JOptionPane.showConfirmDialog(null, "¿Listo para pagar?", "Pagar", JOptionPane.YES_NO_OPTION);
+
+                if (dialogResult == JOptionPane.YES_OPTION) {
+
                     Input in = new Input(subtotal, iva, total());
                     in.setVisible(true);
                     DefaultTableModel dm = (DefaultTableModel) jTable1.getModel();
                     int rowCount = dm.getRowCount();
 //Remove rows one by one from the end of the table
                     for (int i = rowCount - 1; i >= 0; i--) {
-                        
+
                         dm.removeRow(i);
-                    
+
                     }
-                    
+
                     total.setText("Total = ");
-                
-                } else{
-                  
+
+                } else {
+
                     inputtext.setText("");
-                    
+
                 }
-            } else{
-                
+            } else {
+
                 JOptionPane.showMessageDialog(null, "No puede pagar si no se ha vendido nada.", "Error", JOptionPane.WARNING_MESSAGE);
 
-                
             }
         }
         if (evt.getKeyCode() == KeyEvent.VK_S) {
             if (jTable1.getRowCount() > 0) {
                 JOptionPane.showMessageDialog(null, "Termine o cancele su venta antes de salir", "Error", JOptionPane.WARNING_MESSAGE);
                 inputtext.setText("");
-            }
-            int result = JOptionPane.showConfirmDialog(null, "¿Seguro que desea salir?", "Salir",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if (result == JOptionPane.YES_OPTION) {
-                System.exit(0);
             } else {
-                inputtext.setText("");
+
+                int result = JOptionPane.showConfirmDialog(null, "¿Seguro que desea salir?", "Salir",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (result == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else {
+                    inputtext.setText("");
+                }
+
             }
+
         }
     }//GEN-LAST:event_inputtextKeyPressed
 
