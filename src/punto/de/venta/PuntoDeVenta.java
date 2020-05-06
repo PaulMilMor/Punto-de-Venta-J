@@ -21,9 +21,10 @@ public class PuntoDeVenta {
     public static void main(String[] args) {
         // TODO code application logic here
         Ventas ventas = new Ventas();
-        ventas.pack();
-        ventas.setLocationRelativeTo(null);
+        //ventas.pack();
+        //ventas.setLocationRelativeTo(null);
         ventas.setExtendedState(ventas.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        //ventas.setUndecorated(true);
         ventas.setVisible(true);
         
     }

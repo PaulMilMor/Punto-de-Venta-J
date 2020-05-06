@@ -107,13 +107,14 @@ public class Ventas extends javax.swing.JFrame {
             int code;
 
             try {
-
                 code = Integer.parseInt(inputtext.getText());
+                
 
             } catch (NumberFormatException e) {
 
                 code = 0;
                 JOptionPane.showMessageDialog(null, "Inserte un código válido.", "Error", JOptionPane.WARNING_MESSAGE);
+                System.out.println(e.getMessage());
                 inputtext.setText("");
 
             }
@@ -177,6 +178,7 @@ public class Ventas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         Title.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 18)); // NOI18N
         Title.setText("SISTEMA DE PUNTO DE VENTA MAG v1.0");
@@ -190,7 +192,7 @@ public class Ventas extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Producto", "Cantidad", "Precio Unitario", "Descuento", "Importe"
+                "Producto", "Cantidad", "Precio Unitario", "Descuento Unitario", "Importe"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -203,6 +205,7 @@ public class Ventas extends javax.swing.JFrame {
         });
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.setEnabled(false);
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -279,17 +282,18 @@ public class Ventas extends javax.swing.JFrame {
     private void inputtextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputtextKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            inputtext.setText("");
             productos = c.getProductos();
             buscarProductos();
+            
+            inputtext.setText("");
             
             
         }
         if(evt.getKeyCode() == KeyEvent.VK_H){
             
-            inputtext.setText("");
             Help h = new Help();
             h.setVisible(true);
+            inputtext.setText("");
             
             
         }
@@ -312,7 +316,7 @@ public class Ventas extends javax.swing.JFrame {
             float iva = total() - subtotal;
             if (vendidos.size() >= 1) {
                
-                int dialogResult = JOptionPane.showConfirmDialog (null, "Would You Like to Save your Previous Note First?","Warning",JOptionPane.YES_NO_OPTION);
+                int dialogResult = JOptionPane.showConfirmDialog (null, "¿Listo para pagar?","Pagar",JOptionPane.YES_NO_OPTION);
                 
                 if(dialogResult == JOptionPane.YES_OPTION){
                     

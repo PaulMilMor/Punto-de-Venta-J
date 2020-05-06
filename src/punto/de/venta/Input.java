@@ -76,6 +76,8 @@ public class Input extends javax.swing.JFrame {
         total = new javax.swing.JLabel();
         pagado = new javax.swing.JTextField();
         regresar = new javax.swing.JLabel();
+        error = new javax.swing.JLabel();
+        placeholder = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -130,18 +132,17 @@ public class Input extends javax.swing.JFrame {
         regresar.setText("0.00");
         regresar.setName("subtotal"); // NOI18N
 
+        error.setFont(new java.awt.Font("OCR A Extended", 0, 12)); // NOI18N
+        error.setForeground(new java.awt.Color(255, 0, 0));
+        error.setText("|");
+
+        placeholder.setFont(new java.awt.Font("OCR A Extended", 0, 12)); // NOI18N
+        placeholder.setText("|");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel3))
-                    .addComponent(jLabel1))
-                .addGap(116, 116, 116))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -162,12 +163,14 @@ public class Input extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel7)
-                                    .addComponent(jLabel8))
+                                    .addComponent(jLabel8)
+                                    .addComponent(error)
+                                    .addComponent(placeholder))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(pagado, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGap(0, 154, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(total))))
@@ -175,15 +178,23 @@ public class Input extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(regresar)))))
                 .addGap(15, 15, 15))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(143, 143, 143)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel3))
+                    .addComponent(jLabel1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(47, 47, 47)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
-                .addGap(80, 80, 80)
+                .addGap(69, 69, 69)
                 .addComponent(jLabel2)
                 .addGap(100, 100, 100)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -201,11 +212,15 @@ public class Input extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(pagado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(error)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(regresar))
-                .addContainerGap(278, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(placeholder)
+                .addContainerGap(253, Short.MAX_VALUE))
         );
 
         pack();
@@ -232,10 +247,31 @@ public class Input extends javax.swing.JFrame {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             
             if(regresar.getText() =="0.00"){
+                if(pagado.getText().isBlank() || pagado.getText().isEmpty()){
+                    
+                    error.setText("Cantidad inválida");
+                    
+                }
+                else{
+                    
+                    float reccash = Float.parseFloat(pagado.getText());
+                    if(reccash < Float.parseFloat(total.getText())){
+                        
+                        error.setText("Cantidad inválida.");
+                        
+                    }
+                    else{
+                        
+                        regresar.setText("$" + (reccash- Float.parseFloat(total.getText())));
+                        placeholder.setText("Presione Enter para cerrar.");
+                        error.setText("|");
+                        
+                    }
+                    
+                    
+                    
+                }
                 
-                float reccash = Float.parseFloat(pagado.getText());
-                regresar.setText("$" + (reccash- Float.parseFloat(total.getText())));
-            
             }
             else{
                 
@@ -281,6 +317,7 @@ public class Input extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel error;
     private javax.swing.JLabel iva;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -291,6 +328,7 @@ public class Input extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField pagado;
+    private javax.swing.JLabel placeholder;
     private javax.swing.JLabel regresar;
     private javax.swing.JLabel subtotal;
     private javax.swing.JLabel total;
